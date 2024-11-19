@@ -5,41 +5,40 @@ import m1 from "./images/movie1.jpg";
 import m2 from "./images/m2.jpg";
 import m3 from "./images/m4.jpg";
 
-// Example Movie Data (you can replace this with actual API data)
 const movies = [
   {
     id: 1,
     title: "Inception",
     genre: "Sci-Fi",
-    duration: "148 min", // Added duration
+    duration: "148 min",
     imageUrl: BG,
   },
   {
     id: 2,
     title: "The Dark Knight",
     genre: "Action",
-    duration: "152 min", // Added duration
+    duration: "152 min",
     imageUrl: m1,
   },
   {
     id: 3,
     title: "The Matrix",
     genre: "Sci-Fi",
-    duration: "136 min", // Added duration
+    duration: "136 min",
     imageUrl: m2,
   },
   {
     id: 4,
     title: "The Godfather",
     genre: "Crime",
-    duration: "175 min", // Added duration
+    duration: "175 min",
     imageUrl: m3,
   },
   {
     id: 5,
     title: "Pulp Fiction",
     genre: "Drama",
-    duration: "154 min", // Added duration
+    duration: "154 min",
     imageUrl: BG,
   },
   {
@@ -49,13 +48,12 @@ const movies = [
     duration: "142 min", // Added duration
     imageUrl: m2,
   },
-  // Add more movies if needed to test pagination
 ];
 
 const Movies = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [moviesPerPage] = useState(15); // Set how many movies you want to show per page
+  const [moviesPerPage] = useState(15);
   const [filteredMovies, setFilteredMovies] = useState(movies);
 
   useEffect(() => {
@@ -66,7 +64,6 @@ const Movies = () => {
     );
   }, [searchQuery]);
 
-  // Get current movies based on page and items per page
   const indexOfLastMovie = currentPage * moviesPerPage;
   const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
   const currentMovies = filteredMovies.slice(
@@ -102,7 +99,7 @@ const Movies = () => {
         ) : (
           currentMovies.map((movie) => (
             <Link
-              to={`/movies/${movie.id}`} // Navigate to movie details page using the movie's ID
+              to={`/movies/${movie.id}`}
               key={movie.id}
               className="bg-cyan-300 shadow-lg rounded-lg overflow-hidden"
             >

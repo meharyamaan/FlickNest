@@ -6,6 +6,8 @@ import Movies from "./components/movies/Movies";
 import Seasons from "./components/seasons/Seasons";
 import Favourites from "./components/favourite/Favourites";
 import WatchList from "./components/watchlist/WatchList";
+import MovieDetails from "./components/movies/moviesDetails";
+import SeasonsDetail from "./components/seasons/seasonsDetail";
 
 function App() {
   return (
@@ -29,10 +31,27 @@ function App() {
           }
         />
         <Route
+          path="/movies/:movieId"
+          element={
+            <Layout>
+              <MovieDetails />
+            </Layout>
+          }
+        />
+
+        <Route
           path="/seasons"
           element={
             <Layout>
               <Seasons />
+            </Layout>
+          }
+        />
+        <Route
+          path="/seasons/:seasonsId"
+          element={
+            <Layout>
+              <SeasonsDetail />
             </Layout>
           }
         />
