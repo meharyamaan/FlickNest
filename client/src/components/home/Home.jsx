@@ -11,8 +11,7 @@ const Home = () => {
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-6">
           Your ultimate destination for movies, seasons, and top ratings.
-          Explore your favorites, create watchlists, and <br />
-          stay entertained!
+          Explore your favorites, create watchlists, and stay entertained!
         </p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 w-full max-w-4xl mx-auto">
           <Link
