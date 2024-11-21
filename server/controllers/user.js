@@ -1,8 +1,12 @@
 const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { sendLinkEmail } = require("../utils/email");
+const crypto = require("crypto");
 require("dotenv").config();
-const Signup = async (req, res) => {
+
+//////////////signUp/////////////
+const signUp = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
   if (!username || !email || !password || !confirmPassword) {
     return res.status(400).send({ message: "All field Required" });
@@ -31,7 +35,8 @@ const Signup = async (req, res) => {
   }
 };
 
-const Login = async (req, res) => {
+//////////////login/////////////
+const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).send({ message: "Email and Passowrd Required" });
@@ -54,4 +59,65 @@ const Login = async (req, res) => {
   }
 };
 
-module.exports = { Signup, Login };
+//////////////Forgot Password/////////////
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).send({ message: "Email is required" });
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).send({ message: "User not found" });
+  }
+
+  try {
+    const resetToken = crypto.randomByte(32).toString("hex");
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
+
+    await user.save();
+
+    const resetLink = `http://localhost:5000/api/reset-password/${resetToken}`;
+
+    await sendLinkEmail(email, resetLink);
+    console.log(`Reset Link: ${resetLink}`);
+    res.status(200).send({ message: "Reset link sent to your email" });
+  } catch (error) {
+    res.status(500).send({ message: "Error in sending reset link" });
+  }
+};
+
+///////////////////Reset Password////////////////
+const resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) {
+    return res
+      .status(400)
+      .send({ message: "Token and new password are required" });
+  }
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).send({ message: "Invalid or expired token" });
+    }
+
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).send({ message: "Password updated successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Error resetting password" });
+  }
+};
+
+module.exports = { signUp, login, forgotPassword, resetPassword };

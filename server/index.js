@@ -1,11 +1,10 @@
 const express = require("express");
+const router = require("./routes/route");
 const app = express();
 
 const connectDB = require("./config/Db");
-
-app.get("/api", (req, res) => {
-  res.send("api is running");
-});
+app.use(express.json());
+app.use("/api", router);
 
 connectDB();
 
