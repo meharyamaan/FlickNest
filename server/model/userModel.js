@@ -13,12 +13,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
   isVerified: {
     type: Boolean,
     default: false,
   },
-  resetPasswordToken: { type: String, default: undefined },
-  resetPasswordExpires: { type: Date, default: undefined },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 });
 
 module.exports = mongoose.model("user", UserSchema);

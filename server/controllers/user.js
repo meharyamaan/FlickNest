@@ -71,18 +71,17 @@ const forgotPassword = async (req, res) => {
   }
 
   try {
-    const resetToken = crypto.randomByte(32).toString("hex");
+    const resetToken = crypto.randomBytes(32).toString("hex");
 
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpires = Date.now() + 15 * 60 * 1000;
 
     await user.save();
 
-    const resetLink = `http://localhost:5000/api/reset-password/${resetToken}`;
+    const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
 
     await sendLinkEmail(email, resetLink);
-    console.log(`Reset Link: ${resetLink}`);
-    res.status(200).send({ message: "Reset link sent to your email" });
+    res.status(200).send({ message: "Link Sent to Your Mail" });
   } catch (error) {
     res.status(500).send({ message: "Error in sending reset link" });
   }

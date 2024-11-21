@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -8,11 +9,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.sendLinkEmail = async (email, link) => {
+exports.sendLinkEmail = async (email, resetLink) => {
   await transporter.sendMail({
     from: process.env.SMTP_EMAIL,
     to: email,
     subject: "Verify Your Email",
-    text: `Your link is ${link}. It expires in 1 hour.`,
+    text: `Your link is ${resetLink}. It expires in 1 hour.`,
   });
 };
