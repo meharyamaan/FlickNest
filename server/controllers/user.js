@@ -31,6 +31,10 @@ const signUp = async (req, res) => {
     await newUser.save();
     res.status(200).send({ message: "User created successfully" });
   } catch (error) {
+    if (error.code === 11000) {
+      // Duplicate key error
+      return res.status(409).send({ message: "Email already exists" });
+    }
     res.status(500).send({ message: "Error in creating user" });
   }
 };
@@ -41,6 +45,7 @@ const login = async (req, res) => {
   if (!email || !password) {
     return res.status(400).send({ message: "Email and Passowrd Required" });
   }
+
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(404).send({ message: "Email not found" });
